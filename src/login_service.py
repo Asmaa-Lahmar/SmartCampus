@@ -21,6 +21,7 @@ class LoginService:
         self._annuaire = annuaire
 
     def login(self, email, password):
+        # CA2 : vérifier la présence des champs obligatoires avant la connexion.
         if not email or not password:                   # CA2
             return LoginResult(False, MSG_CHAMPS_VIDES)
         if not EMAIL_REGEX.match(email):                # CA2
