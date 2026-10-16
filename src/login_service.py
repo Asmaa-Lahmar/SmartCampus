@@ -17,10 +17,7 @@ class LoginResult:
 
 
 class LoginService:
-    """Valide les identifiants d'un utilisateur (CA1 à CA3 de SC-11)."""
-
     def __init__(self, annuaire):
-        # annuaire : {email: mot_de_passe}, simule la base des utilisateurs
         self._annuaire = annuaire
 
     def login(self, email, password):
