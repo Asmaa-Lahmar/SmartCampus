@@ -5,12 +5,12 @@ from src.login_service import MSG_ECHEC, LoginService, hacher_mot_de_passe
 
 app = FastAPI(title="SmartCampus API")
 
-# Compte de démonstration : sera remplacé par la table User (PostgreSQL)
+
 service = LoginService({"etudiant@ensa.ma": hacher_mot_de_passe("Secret123")})
 
 
 class LoginRequest(BaseModel):
-    # Champs libres : la validation (CA2) reste dans LoginService
+
     email: str | None = None
     password: str | None = None
 
