@@ -15,17 +15,18 @@ class LoginResult:
     success: bool
     message: str
 
+def _est_vide(valeur):
+    return valeur is None or not valeur.strip()
 
 class LoginService:
     def __init__(self, annuaire):
         self._annuaire = annuaire
 
     def login(self, email, password):
-        # CA2 : vérifier la présence des champs obligatoires avant la connexion.
-        if not email or not password:                   # CA2
+        if _est_vide(email) or _est_vide(password):                   
             return LoginResult(False, MSG_CHAMPS_VIDES)
-        if not EMAIL_REGEX.match(email):                # CA2
+        if not EMAIL_REGEX.match(email):                
             return LoginResult(False, MSG_EMAIL_INVALIDE)
-        if self._annuaire.get(email) != password:       # CA3
+        if self._annuaire.get(email) != password:       
             return LoginResult(False, MSG_ECHEC)
         return LoginResult(True, MSG_SUCCES)         

@@ -2,12 +2,12 @@ import unittest
 
 from src.login_service import (
     LoginService,
+    LoginResult,
     MSG_CHAMPS_VIDES,
     MSG_ECHEC,
     MSG_EMAIL_INVALIDE,
     MSG_SUCCES,
 )
-
 
 class LoginServiceTest(unittest.TestCase):
     def setUp(self):
@@ -37,6 +37,23 @@ class LoginServiceTest(unittest.TestCase):
         self.assertEqual(inconnu.message, mauvais_mdp.message)
         self.assertEqual(inconnu.message, MSG_ECHEC)
 
+class TestChampsAvecEspaces(unittest.TestCase):
+
+    def setUp(self):
+        self.service = LoginService({"user@example.com": "secret"})
+
+    def test_champs_avec_espaces_consideres_vides(self):
+        cas = [
+            ("   ", "secret"),               
+            ("user@example.com", "   "),     
+            ("\t", "\n"),                    
+        ]
+        for email, password in cas:
+            with self.subTest(email=email, password=password):
+                self.assertEqual(
+                    self.service.login(email, password),
+                    LoginResult(False, MSG_CHAMPS_VIDES),
+                )
 
 if __name__ == "__main__":
     unittest.main()
