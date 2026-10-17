@@ -22,7 +22,7 @@ def _est_vide(valeur):
 
 
 def hacher_mot_de_passe(password):
-    """Retourne le hash bcrypt du mot de passe (ENF-01 : jamais stocké en clair)."""
+    
     return bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
 
 
