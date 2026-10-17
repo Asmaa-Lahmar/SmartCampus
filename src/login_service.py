@@ -28,16 +28,16 @@ def hacher_mot_de_passe(password):
 
 class LoginService:
     def __init__(self, annuaire):
-        # annuaire : {email: mot de passe haché avec hacher_mot_de_passe()}
+       
         self._annuaire = annuaire
 
     def login(self, email, password):
-        if _est_vide(email) or _est_vide(password):     # CA2
+        if _est_vide(email) or _est_vide(password):     
             return LoginResult(False, MSG_CHAMPS_VIDES)
         email = email.strip()
-        if not EMAIL_REGEX.match(email):                # CA2
+        if not EMAIL_REGEX.match(email):                
             return LoginResult(False, MSG_EMAIL_INVALIDE)
         hache = self._annuaire.get(email)
-        if hache is None or not bcrypt.checkpw(password.encode("utf-8"), hache):  # CA3
+        if hache is None or not bcrypt.checkpw(password.encode("utf-8"), hache):  
             return LoginResult(False, MSG_ECHEC)
         return LoginResult(True, MSG_SUCCES)
