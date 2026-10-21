@@ -1,4 +1,4 @@
-"""Route de connexion POST /api/auth/login (SC-12, SC-11)."""
+
 
 from datetime import datetime
 from typing import Annotated

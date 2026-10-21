@@ -1,4 +1,4 @@
-"""Table users : comptes et état de connexion (SC-12)."""
+
 
 import enum
 from datetime import datetime

@@ -1,4 +1,4 @@
-"""Hachage des mots de passe (bcrypt) et jetons d'accès (PyJWT) - ENF-01, ENF-02."""
+
 
 import uuid
 from datetime import UTC, datetime, timedelta

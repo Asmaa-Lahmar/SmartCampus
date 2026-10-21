@@ -1,9 +1,3 @@
-"""Service d'authentification : vérifie les identifiants et émet le jeton.
-
-Version SC-12 : contrôle de l'e-mail et du mot de passe.
-SC-11 ajoute le domaine et le compte désactivé ; SC-16 ajoute le blocage.
-"""
-
 from dataclasses import dataclass
 from datetime import datetime
 
