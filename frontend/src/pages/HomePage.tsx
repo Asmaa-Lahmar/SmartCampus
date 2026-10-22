@@ -1,6 +1,6 @@
-// Accueil après connexion (SC-11). SC-15 ajoute la déconnexion.
-
-import { ROLE_LABELS, type Session } from '../auth/session'
+import { useEffect, useState } from 'react'
+import { fetchMe, logout, setUnauthorizedHandler } from '../api/client'
+import { clearSession, isExpired, ROLE_LABELS, type Session } from '../auth/session'
 
 interface Props {
   session: Session
@@ -11,8 +11,44 @@ function formatTime(iso: string): string {
   return new Date(iso).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
 }
 
-export default function HomePage({ session }: Props) {
-  const { user } = session
+export default function HomePage({ session, onLoggedOut }: Props) {
+  const [user, setUser] = useState(session.user)
+  const [busy, setBusy] = useState(false)
+
+  useEffect(() => {
+    setUnauthorizedHandler(onLoggedOut)
+
+    const checkExpiry = () => {
+      if (isExpired(session)) {
+        clearSession()
+        onLoggedOut()
+      }
+    }
+    window.addEventListener('focus', checkExpiry)
+    document.addEventListener('visibilitychange', checkExpiry)
+
+    fetchMe(session)
+      .then(setUser)
+      .catch(() => {
+      })
+
+    return () => {
+      setUnauthorizedHandler(null)
+      window.removeEventListener('focus', checkExpiry)
+      document.removeEventListener('visibilitychange', checkExpiry)
+    }
+  }, [session, onLoggedOut])
+
+  async function handleLogout() {
+    setBusy(true)
+    try {
+      await logout(session)
+    } catch {
+      
+    } finally {
+      onLoggedOut()
+    }
+  }
 
   return (
     <div className="page">
@@ -22,6 +58,9 @@ export default function HomePage({ session }: Props) {
           SmartCampus
         </span>
         <span className="topbar-user">{user.full_name}</span>
+        <button type="button" className="button-secondary" onClick={handleLogout} disabled={busy}>
+          {busy ? 'Déconnexion…' : 'Se déconnecter'}
+        </button>
       </header>
 
       <main className="home">
