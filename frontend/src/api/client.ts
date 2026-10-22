@@ -1,6 +1,5 @@
-// Appels à l'API SmartCampus (SC-11). En développement, Vite relaie /api vers le port 8000.
 
-import type { Session } from '../auth/session'
+import { clearSession, type Session, type SessionUser } from '../auth/session'
 
 export class ApiError extends Error {
   status: number
@@ -33,4 +32,37 @@ export async function login(email: string, password: string): Promise<Session> {
   if (!response.ok) throw await readError(response)
   const body = await response.json()
   return { accessToken: body.access_token, expiresAt: body.expires_at, user: body.user }
+}
+
+// Appelé quand l'API refuse le jeton (expiré, révoqué) : l'écran revient à la connexion
+let onUnauthorized: (() => void) | null = null
+
+export function setUnauthorizedHandler(handler: (() => void) | null): void {
+  onUnauthorized = handler
+}
+
+async function authFetch(session: Session, path: string, init: RequestInit = {}): Promise<Response> {
+  const headers = new Headers(init.headers)
+  headers.set('Authorization', `Bearer ${session.accessToken}`)
+  const response = await fetch(path, { ...init, headers })
+  if (response.status === 401) {
+    clearSession()
+    onUnauthorized?.()
+  }
+  if (!response.ok) throw await readError(response)
+  return response
+}
+
+export async function fetchMe(session: Session): Promise<SessionUser> {
+  const response = await authFetch(session, '/api/auth/me')
+  return response.json()
+}
+
+export async function logout(session: Session): Promise<void> {
+  try {
+    await authFetch(session, '/api/auth/logout', { method: 'POST' })
+  } finally {
+    // Même si l'API est injoignable, la session locale est effacée
+    clearSession()
+  }
 }
