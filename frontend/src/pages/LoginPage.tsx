@@ -1,4 +1,3 @@
-// Écran de connexion (SC-11 : EF-AUTH-01, EF-AUTH-03).
 
 import { useState, type FormEvent } from 'react'
 import { ApiError, login } from '../api/client'
@@ -29,9 +28,8 @@ export default function LoginPage({ onLoggedIn }: Props) {
       if (err instanceof ApiError && err.status >= 500) {
         setError(SERVER_UNREACHABLE)
       } else if (err instanceof ApiError) {
-        // 400 : adresse hors domaine ; 403 : compte désactivé
-        if ((err.status === 400 || err.status === 403) && err.detail) setError(err.detail)
-        else setError(INVALID_CREDENTIALS)
+        
+        setError(err.status === 401 || !err.detail ? INVALID_CREDENTIALS : err.detail)
       } else {
         setError(SERVER_UNREACHABLE)
       }
