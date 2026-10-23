@@ -37,7 +37,7 @@ def test_email_is_case_and_space_insensitive(client, make_user):
 def test_wrong_password_gives_generic_message(client, make_user):
     make_user()
     response = login(client, password="faux")
-    assert response.status_code == 403
+    assert response.status_code == 401
     assert response.json() == {"detail": INVALID_CREDENTIALS}
 
 
