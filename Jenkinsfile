@@ -66,8 +66,8 @@ report=xml:reports\\coverage.xml')
 
 def run(String linuxCommand, String windowsCommand) {
             if (isUnix()) {
-        sh linuxCommand
-        } else {
-        bat windowsCommand
-        }
+                    sh linuxCommand
+             } else {
+                  bat windowsCommand
+             }
 }
