@@ -1,1 +1,1 @@
-smartcampus
+Test de déclenchement automatique Jenkins.
