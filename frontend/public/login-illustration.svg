@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360">
+  <!-- Illustration décorative de la page de connexion : campus, arbres et nuages -->
+  <defs>
+    <!-- Les bords gauche et droit s'estompent pour se fondre dans le fond de la page -->
+    <linearGradient id="fade" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0" stop-color="#fff" stop-opacity="0"/>
+      <stop offset="0.14" stop-color="#fff"/>
+      <stop offset="0.82" stop-color="#fff"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+    <mask id="edges">
+      <rect width="640" height="360" fill="url(#fade)"/>
+    </mask>
+  </defs>
+  <g mask="url(#edges)">
+  <circle cx="500" cy="250" r="178" fill="#dde8fb"/>
+  <g fill="#d2e0f8">
+    <circle cx="372" cy="80" r="11"/>
+    <circle cx="388" cy="72" r="15"/>
+    <circle cx="406" cy="80" r="11"/>
+    <rect x="360" y="80" width="58" height="11" rx="5.5"/>
+    <circle cx="452" cy="142" r="9"/>
+    <circle cx="466" cy="135" r="12"/>
+    <circle cx="481" cy="142" r="9"/>
+    <rect x="442" y="142" width="48" height="9" rx="4.5"/>
+  </g>
+  <path d="M0 312 C90 280 170 286 250 296 C330 306 420 280 520 282 C580 283 620 290 640 294 L640 360 L0 360 Z" fill="#c6d8f6"/>
+
+  <!-- Aile droite -->
+  <path d="M432 150 L478 150 L478 304 L432 304 Z" fill="#d6e3fa"/>
+  <path d="M432 150 L446 142 L492 142 L478 150 Z" fill="#c2d5f6"/>
+  <path d="M478 150 L492 142 L492 304 L478 304 Z" fill="#aac3f0"/>
+  <g fill="#5f91e9">
+    <rect x="440" y="160" width="11" height="12"/><rect x="458" y="160" width="11" height="12"/>
+    <rect x="440" y="182" width="11" height="12"/><rect x="458" y="182" width="11" height="12"/>
+    <rect x="440" y="204" width="11" height="12"/><rect x="458" y="204" width="11" height="12"/>
+    <rect x="440" y="226" width="11" height="12"/><rect x="458" y="226" width="11" height="12"/>
+    <rect x="440" y="248" width="11" height="12"/><rect x="458" y="248" width="11" height="12"/>
+    <rect x="440" y="270" width="11" height="12"/><rect x="458" y="270" width="11" height="12"/>
+  </g>
+
+  <!-- Aile gauche -->
+  <path d="M276 170 L338 170 L338 304 L276 304 Z" fill="#e4edfd"/>
+  <path d="M276 170 L290 160 L352 160 L338 170 Z" fill="#c2d5f6"/>
+  <g fill="#5f91e9">
+    <rect x="284" y="180" width="11" height="12"/><rect x="302" y="180" width="11" height="12"/><rect x="320" y="180" width="11" height="12"/>
+    <rect x="284" y="202" width="11" height="12"/><rect x="302" y="202" width="11" height="12"/><rect x="320" y="202" width="11" height="12"/>
+    <rect x="284" y="224" width="11" height="12"/><rect x="302" y="224" width="11" height="12"/><rect x="320" y="224" width="11" height="12"/>
+    <rect x="284" y="246" width="11" height="12"/><rect x="302" y="246" width="11" height="12"/><rect x="320" y="246" width="11" height="12"/>
+    <rect x="284" y="268" width="11" height="12"/><rect x="302" y="268" width="11" height="12"/><rect x="320" y="268" width="11" height="12"/>
+  </g>
+
+  <!-- Tour principale -->
+  <path d="M338 96 L408 96 L408 304 L338 304 Z" fill="#eef4fe"/>
+  <path d="M408 96 L432 84 L432 304 L408 304 Z" fill="#b4cbf3"/>
+  <path d="M338 96 L362 84 L432 84 L408 96 Z" fill="#d4e2f9"/>
+  <g fill="#3f78e0">
+    <rect x="346" y="106" width="13" height="13"/><rect x="366" y="106" width="13" height="13"/><rect x="386" y="106" width="13" height="13"/>
+    <rect x="346" y="126" width="13" height="13"/><rect x="366" y="126" width="13" height="13"/><rect x="386" y="126" width="13" height="13"/>
+    <rect x="346" y="146" width="13" height="13"/><rect x="366" y="146" width="13" height="13"/><rect x="386" y="146" width="13" height="13"/>
+    <rect x="346" y="166" width="13" height="13"/><rect x="366" y="166" width="13" height="13"/><rect x="386" y="166" width="13" height="13"/>
+    <rect x="346" y="186" width="13" height="13"/><rect x="366" y="186" width="13" height="13"/><rect x="386" y="186" width="13" height="13"/>
+    <rect x="346" y="206" width="13" height="13"/><rect x="366" y="206" width="13" height="13"/><rect x="386" y="206" width="13" height="13"/>
+    <rect x="346" y="226" width="13" height="13"/><rect x="366" y="226" width="13" height="13"/><rect x="386" y="226" width="13" height="13"/>
+    <rect x="346" y="246" width="13" height="13"/><rect x="366" y="246" width="13" height="13"/><rect x="386" y="246" width="13" height="13"/>
+  </g>
+  <g fill="#5b8be6" transform="translate(0 204) skewY(-26.565)">
+    <rect x="412" y="106" width="6" height="13"/><rect x="422" y="106" width="6" height="13"/>
+    <rect x="412" y="126" width="6" height="13"/><rect x="422" y="126" width="6" height="13"/>
+    <rect x="412" y="146" width="6" height="13"/><rect x="422" y="146" width="6" height="13"/>
+    <rect x="412" y="166" width="6" height="13"/><rect x="422" y="166" width="6" height="13"/>
+    <rect x="412" y="186" width="6" height="13"/><rect x="422" y="186" width="6" height="13"/>
+    <rect x="412" y="206" width="6" height="13"/><rect x="422" y="206" width="6" height="13"/>
+    <rect x="412" y="226" width="6" height="13"/><rect x="422" y="226" width="6" height="13"/>
+    <rect x="412" y="246" width="6" height="13"/><rect x="422" y="246" width="6" height="13"/>
+  </g>
+  <path d="M358 274 L388 274 L388 279 L358 279 Z" fill="#1d4fb8"/>
+  <path d="M362 279 L384 279 L384 304 L362 304 Z" fill="#2c62cc"/>
+
+  <!-- Sol et allée -->
+  <path d="M0 360 L0 322 C110 300 210 302 300 304 L500 304 C560 306 610 312 640 318 L640 360 Z" fill="#e3edfd"/>
+  <path d="M362 304 L384 304 C386 320 350 330 300 338 C250 346 214 352 196 360 L150 360 C176 348 228 336 282 326 C334 316 362 312 362 304 Z" fill="#ffffff"/>
+
+  <!-- Arbres et haies -->
+  <rect x="208" y="282" width="4" height="24" rx="2" fill="#2a56a8"/>
+  <circle cx="210" cy="272" r="14" fill="#4d82e3"/>
+  <rect x="247" y="262" width="5" height="44" rx="2" fill="#2a56a8"/>
+  <circle cx="250" cy="246" r="24" fill="#3b73dd"/>
+  <circle cx="238" cy="262" r="15" fill="#2f66d0"/>
+  <circle cx="263" cy="258" r="13" fill="#4d82e3"/>
+  <rect x="506" y="268" width="5" height="38" rx="2" fill="#2a56a8"/>
+  <circle cx="508" cy="255" r="20" fill="#3b73dd"/>
+  <circle cx="519" cy="266" r="12" fill="#2f66d0"/>
+  <circle cx="282" cy="300" r="10" fill="#4d82e3"/>
+  <circle cx="298" cy="302" r="9" fill="#2f66d0"/>
+  <circle cx="318" cy="301" r="11" fill="#3b73dd"/>
+  <circle cx="400" cy="300" r="10" fill="#4d82e3"/>
+  <circle cx="418" cy="302" r="12" fill="#2f66d0"/>
+  <circle cx="440" cy="300" r="10" fill="#4d82e3"/>
+  <circle cx="462" cy="302" r="11" fill="#3b73dd"/>
+  <circle cx="486" cy="301" r="9" fill="#2f66d0"/>
+  </g>
+</svg>
