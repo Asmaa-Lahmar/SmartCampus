@@ -1,8 +1,4 @@
-"""Fixtures pytest (SC-14) : base PostgreSQL de test, client HTTP et comptes.
 
-Les tests n'utilisent jamais la base de développement : l'URL vient de
-TEST_DATABASE_URL et le nom de la base doit finir par « _test ».
-"""
 
 import importlib
 import os
@@ -11,7 +7,7 @@ from collections.abc import Callable, Iterator
 
 from dotenv import dotenv_values  # fourni par pydantic-settings
 
-# Lire backend/.env si présent, puis fixer l'environnement AVANT d'importer src
+
 _dotenv = dotenv_values(".env")
 TEST_DATABASE_URL = (
     os.environ.get("TEST_DATABASE_URL")
@@ -19,7 +15,7 @@ TEST_DATABASE_URL = (
     or ("postgresql+psycopg://smartcampus:smartcampus@localhost:5432/smartcampus_test")
 )
 os.environ["DATABASE_URL"] = TEST_DATABASE_URL
-os.environ["BCRYPT_ROUNDS"] = "4"  # hachage rapide pour les tests uniquement
+os.environ["BCRYPT_ROUNDS"] = "4"  
 os.environ["ALLOWED_EMAIL_DOMAIN"] = "usms.ac.ma"
 
 import pytest
