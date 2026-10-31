@@ -1,6 +1,5 @@
-"""Salles : liste pour tous (SC-21 : EF-ROOM-01), création, modification et archivage
-par le gestionnaire (SC-20 : EF-ROOM-04, ENF-03)."""
-
+from datetime import date as Date
+from datetime import time
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, Query, Request, status
@@ -22,7 +21,7 @@ CurrentUser = Annotated[User, Depends(get_current_user)]
 Manager = Annotated[User, Depends(require_roles(Role.GESTIONNAIRE))]
 Db = Annotated[Session, Depends(get_db)]
 
-# Lettres, chiffres et tirets : A-101, AMPHI-A
+
 CODE_PATTERN = r"^\s*[A-Za-z0-9][A-Za-z0-9-]*\s*$"
 
 
@@ -47,13 +46,20 @@ class RoomCreate(BaseModel):
 
 
 class RoomUpdate(BaseModel):
-    """Seuls les champs envoyés sont modifiés."""
+    
 
     code: str | None = Field(default=None, min_length=1, max_length=20, pattern=CODE_PATTERN)
     building: str | None = Field(default=None, min_length=2, max_length=80)
     room_type: RoomType | None = None
     capacity: int | None = Field(default=None, ge=1, le=500)
     description: str | None = Field(default=None, max_length=500)
+
+
+class AvailabilityOut(BaseModel):
+    date: Date
+    start: time
+    end: time
+    rooms: list[RoomOut]
 
 
 def client_ip(request: Request) -> str | None:
@@ -82,6 +88,20 @@ def list_rooms(user: CurrentUser, db: Db, filters: Filters, include_archived: bo
     if include_archived and user.role != Role.GESTIONNAIRE:
         raise ServiceError(403, FORBIDDEN)
     return room_service.list_rooms(db, include_archived, filters)
+
+
+@router.get("/available", response_model=AvailabilityOut)
+def available_rooms(
+    _: CurrentUser,
+    db: Db,
+    filters: Filters,
+    date: Annotated[Date, Query(description="Jour, AAAA-MM-JJ")],
+    start: Annotated[time, Query(description="Début, HH:MM")],
+    end: Annotated[time, Query(description="Fin, HH:MM")],
+) -> AvailabilityOut:
+    """Salles libres sur un créneau (EF-ROOM-02) ; 400 si le créneau ne respecte pas RG-03."""
+    rooms = room_service.find_available(db, date, start, end, filters)
+    return AvailabilityOut(date=date, start=start, end=end, rooms=[RoomOut.model_validate(r) for r in rooms])
 
 
 @router.post("", response_model=RoomOut, status_code=status.HTTP_201_CREATED)
