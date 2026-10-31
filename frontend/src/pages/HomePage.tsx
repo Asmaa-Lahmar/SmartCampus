@@ -33,7 +33,7 @@ const SERVICES: Service[] = [
     title: 'Recherche de salle',
     description: "Consultez la disponibilité des salles et trouvez l'espace adapté à vos besoins.",
     Icon: SearchIcon,
-    sprint: 2,
+    to: '/salles',
   },
   {
     title: 'Réservation de salle',

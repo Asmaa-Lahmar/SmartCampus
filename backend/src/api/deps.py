@@ -1,3 +1,6 @@
+"""Dépendances FastAPI communes : utilisateur connecté à partir du jeton (SC-15, ENF-02)
+et contrôle du rôle sur les routes protégées (SC-17, ENF-03)."""
+
 from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import UTC, datetime

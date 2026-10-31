@@ -1,3 +1,5 @@
+"""Gestion des comptes et des rôles (SC-17 : EF-AUTH-07, RG-11, ENF-03)."""
+
 import pytest
 from sqlalchemy import select
 

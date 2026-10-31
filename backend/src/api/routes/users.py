@@ -1,3 +1,5 @@
+"""Comptes et rôles, réservés à l'administrateur système (SC-17 : EF-AUTH-07, ENF-03)."""
+
 from datetime import datetime
 from typing import Annotated
 

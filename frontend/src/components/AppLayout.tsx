@@ -1,11 +1,11 @@
-// Mise en page des pages connectées (SC-17, SC-20) : barre du haut, navigation selon le rôle,
+// Mise en page des pages connectées (SC-17, SC-20, SC-21) : barre du haut, navigation selon le rôle,
 // déconnexion (SC-15) et retour à la connexion quand le jeton expire.
 
 import { useEffect, useState, type ComponentType, type ReactNode } from 'react'
 import { fetchMe, logout, setUnauthorizedHandler } from '../api/client'
 import { clearSession, isExpired, ROLE_LABELS, type Role, type Session, type SessionUser } from '../auth/session'
 import { Link } from '../router'
-import { FileIcon, HomeIcon, LogoutIcon, SettingsIcon, UsersIcon, type IconProps } from './icons'
+import { FileIcon, HomeIcon, LogoutIcon, SearchIcon, SettingsIcon, UsersIcon, type IconProps } from './icons'
 
 interface NavItem {
   to: string
@@ -17,6 +17,12 @@ interface NavItem {
 
 const NAV_ITEMS: NavItem[] = [
   { to: '/', label: 'Accueil', Icon: HomeIcon, isActive: (path) => path === '/' },
+  {
+    to: '/salles',
+    label: 'Salles',
+    Icon: SearchIcon,
+    isActive: (path) => path === '/salles' || path.startsWith('/salles/'),
+  },
   {
     to: '/gestion/salles',
     label: 'Gestion des salles',

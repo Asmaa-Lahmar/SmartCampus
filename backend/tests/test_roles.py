@@ -1,3 +1,5 @@
+"""Dépendance de contrôle du rôle : un cas par rôle (SC-17 : ENF-03)."""
+
 import pytest
 from fastapi import Depends, FastAPI
 from fastapi.testclient import TestClient

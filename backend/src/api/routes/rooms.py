@@ -1,9 +1,9 @@
-"""Salles : liste pour tous, création, modification et archivage par le gestionnaire
-(SC-20 : EF-ROOM-04, ENF-03)."""
+"""Salles : liste pour tous (SC-21 : EF-ROOM-01), création, modification et archivage
+par le gestionnaire (SC-20 : EF-ROOM-04, ENF-03)."""
 
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, Request, status
+from fastapi import APIRouter, Depends, Query, Request, status
 from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy.orm import Session
 
@@ -14,6 +14,7 @@ from src.models.user import Role, User
 from src.services import room_admin_service, room_service
 from src.services.common import ServiceError
 from src.services.room_admin_service import RoomChanges
+from src.services.room_service import RoomFilters
 
 router = APIRouter(prefix="/api/rooms", tags=["rooms"])
 
@@ -59,12 +60,28 @@ def client_ip(request: Request) -> str | None:
     return request.client.host if request.client else None
 
 
+def room_filters(
+    q: Annotated[str | None, Query(max_length=50, description="Code ou bâtiment")] = None,
+    building: Annotated[str | None, Query(max_length=80)] = None,
+    room_type: RoomType | None = None,
+    min_capacity: Annotated[int | None, Query(ge=1, le=1000, description="Nombre de participants")] = None,
+) -> RoomFilters:
+    return RoomFilters(query=q, building=building, room_type=room_type, min_capacity=min_capacity)
+
+
+Filters = Annotated[RoomFilters, Depends(room_filters)]
+
+
 @router.get("", response_model=list[RoomOut])
-def list_rooms(user: CurrentUser, db: Db, include_archived: bool = False) -> list[Room]:
-    """Salles non archivées ; le gestionnaire peut aussi voir les archivées."""
+def list_rooms(user: CurrentUser, db: Db, filters: Filters, include_archived: bool = False) -> list[Room]:
+    """Salles non archivées : bâtiment, type, capacité, statut (EF-ROOM-01).
+
+    Filtres facultatifs : code ou bâtiment (q), bâtiment exact, type, capacité minimale.
+    Le gestionnaire peut aussi demander les salles archivées.
+    """
     if include_archived and user.role != Role.GESTIONNAIRE:
         raise ServiceError(403, FORBIDDEN)
-    return room_service.list_rooms(db, include_archived)
+    return room_service.list_rooms(db, include_archived, filters)
 
 
 @router.post("", response_model=RoomOut, status_code=status.HTTP_201_CREATED)

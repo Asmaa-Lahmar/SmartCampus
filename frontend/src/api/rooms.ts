@@ -1,4 +1,4 @@
-// Salles : liste, création, modification et archivage (SC-20, EF-ROOM-04).
+// Salles : liste (SC-21, EF-ROOM-01), création, modification et archivage (SC-20, EF-ROOM-04).
 
 import type { Session } from '../auth/session'
 import { withQuery } from '../router'
@@ -41,8 +41,19 @@ export const ROOM_STATUS_LABELS: Record<RoomStatus, string> = {
 
 export const ROOM_TYPES = Object.keys(ROOM_TYPE_LABELS) as RoomType[]
 
-export function fetchRooms(session: Session, options: { includeArchived?: boolean } = {}): Promise<Room[]> {
-  return apiJson<Room[]>(session, withQuery('/api/rooms', { include_archived: options.includeArchived }))
+export interface RoomFilters {
+  q?: string // code ou bâtiment
+  building?: string
+  room_type?: RoomType | ''
+  min_capacity?: number | null
+}
+
+export function fetchRooms(
+  session: Session,
+  options: RoomFilters & { includeArchived?: boolean } = {},
+): Promise<Room[]> {
+  const { includeArchived, ...filters } = options
+  return apiJson<Room[]>(session, withQuery('/api/rooms', { ...filters, include_archived: includeArchived }))
 }
 
 export function createRoom(session: Session, input: RoomInput): Promise<Room> {

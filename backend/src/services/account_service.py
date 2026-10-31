@@ -1,3 +1,12 @@
+"""Gestion des comptes et des rôles par l'administrateur système (SC-17 : EF-AUTH-07, RG-11).
+
+- Un compte n'est jamais supprimé : il est désactivé, ce qui refuse la connexion et coupe
+  ses sessions en cours (get_current_session refuse le jeton d'un compte désactivé).
+- L'administrateur ne fixe pas le mot de passe : le titulaire le choisit avec le lien de
+  réinitialisation (SC-18). D'ici là, le compte a un mot de passe aléatoire que personne ne connaît.
+- Chaque création, changement de rôle et désactivation écrit une ligne dans AuditLog.
+"""
+
 import secrets
 from dataclasses import dataclass
 
