@@ -1,4 +1,4 @@
-// Choisit la page à afficher selon la session, le rôle et l'adresse (SC-11, SC-17).
+// Choisit la page à afficher selon la session, le rôle et l'adresse (SC-11, SC-17, SC-20).
 
 import { useCallback, useState } from 'react'
 import { loadSession, saveSession, type Session, type SessionUser } from './auth/session'
@@ -6,6 +6,7 @@ import AppLayout from './components/AppLayout'
 import AccountsPage from './pages/AccountsPage'
 import HomePage from './pages/HomePage'
 import LoginPage from './pages/LoginPage'
+import ManageRoomsPage from './pages/ManageRoomsPage'
 import StatusPage from './pages/StatusPage'
 import { useLocation, type Location } from './router'
 
@@ -16,6 +17,10 @@ function Forbidden() {
 function renderPage(session: Session, location: Location) {
   const { path } = location
   if (path === '/') return <HomePage user={session.user} />
+  if (path === '/gestion/salles') {
+    if (session.user.role !== 'gestionnaire') return <Forbidden />
+    return <ManageRoomsPage session={session} />
+  }
   if (path === '/admin/comptes') {
     // L'API refuse aussi (403) : ce contrôle évite seulement d'afficher une page inutilisable
     if (session.user.role !== 'administrateur') return <Forbidden />
