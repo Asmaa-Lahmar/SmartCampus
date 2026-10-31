@@ -102,3 +102,35 @@
 .empty-state p:last-child {
   margin-bottom: 0;
 }
+
+/* Recherche d'une salle libre (SC-22) */
+
+.room-search .form-grid {
+  grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr));
+}
+
+.room-results {
+  margin-top: 0.5rem;
+}
+
+.results-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.75rem 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.results-head h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  letter-spacing: -0.01em;
+  color: var(--sc-ink);
+}
+
+.results-head p {
+  margin: 0.25rem 0 0;
+  font-size: 0.9rem;
+  color: var(--sc-muted);
+}

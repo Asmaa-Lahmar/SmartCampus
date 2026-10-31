@@ -1,4 +1,4 @@
-// Salles : liste (SC-21, EF-ROOM-01), création, modification et archivage (SC-20, EF-ROOM-04).
+
 
 import type { Session } from '../auth/session'
 import { withQuery } from '../router'
@@ -66,4 +66,21 @@ export function updateRoom(session: Session, id: number, input: Partial<RoomInpu
 
 export function archiveRoom(session: Session, id: number): Promise<Room> {
   return apiJson<Room>(session, `/api/rooms/${id}/archive`, 'POST')
+}
+
+export interface SlotSearch extends RoomFilters {
+  date: string // AAAA-MM-JJ
+  start: string // HH:MM
+  end: string // HH:MM
+}
+
+export interface Availability {
+  date: string
+  start: string // HH:MM:SS
+  end: string
+  rooms: Room[]
+}
+
+export function searchAvailableRooms(session: Session, search: SlotSearch): Promise<Availability> {
+  return apiJson<Availability>(session, withQuery('/api/rooms/available', { ...search }))
 }
