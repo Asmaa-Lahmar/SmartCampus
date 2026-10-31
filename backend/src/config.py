@@ -1,4 +1,4 @@
-"""Paramètres de l'API, lus dans les variables d'environnement puis dans backend/.env."""
+
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -25,6 +25,12 @@ class Settings(BaseSettings):
 
     # Mot de passe des comptes de démonstration (src/seed.py)
     seed_password: str = "SmartCampus2026!"
+
+    # Créneaux des salles (RG-03) : heure locale du campus, pas de 30 min, du lundi au samedi
+    campus_timezone: str = "Africa/Casablanca"
+    opening_hour: int = 8
+    closing_hour: int = 20
+    slot_minutes: int = 30
 
 
 settings = Settings()

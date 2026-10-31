@@ -1,4 +1,4 @@
-// Choisit la page à afficher selon la session, le rôle et l'adresse (SC-11, SC-17, SC-20, SC-21).
+// Choisit la page à afficher selon la session, le rôle et l'adresse (SC-11, SC-17, SC-20 à SC-22).
 
 import { useCallback, useState } from 'react'
 import { loadSession, saveSession, type Session, type SessionUser } from './auth/session'
@@ -18,7 +18,7 @@ function Forbidden() {
 function renderPage(session: Session, location: Location) {
   const { path } = location
   if (path === '/') return <HomePage user={session.user} />
-  if (path === '/salles') return <RoomsPage session={session} />
+  if (path === '/salles') return <RoomsPage session={session} location={location} />
   if (path === '/gestion/salles') {
     if (session.user.role !== 'gestionnaire') return <Forbidden />
     return <ManageRoomsPage session={session} />
