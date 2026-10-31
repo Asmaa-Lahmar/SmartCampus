@@ -1,19 +1,30 @@
 /* Styles SmartCampus (SC-11) : interface en français, utilisable dès 360 px (ENF-09, ENF-10) */
 
+/* Police Inter ; repli sur la police système si elle ne se charge pas */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* Système de design SmartCampus, défini avec la page de connexion et partagé par toutes les pages */
 :root {
-  --color-primary: #1f4e79;
-  --color-primary-dark: #163a5c;
-  --color-text: #1d2733;
-  --color-muted: #5b6776;
-  --color-border: #d6dde6;
-  --color-surface: #ffffff;
-  --color-background: #f3f6f9;
-  --color-danger-bg: #fdecec;
-  --color-danger-text: #9b1c1c;
-  --radius: 10px;
-  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  color: var(--color-text);
-  background: var(--color-background);
+  --sc-blue: #1d5bd8;
+  --sc-blue-dark: #1747b0;
+  --sc-ink: #0f1b3d;
+  --sc-text: #334155;
+  --sc-muted: #5a6a82;
+  --sc-line: #d5dde9;
+  --sc-line-soft: #e3e9f3;
+  --sc-tint: #e8effc;
+  --sc-hover: #f1f5fb;
+  --sc-danger-bg: #fdecec;
+  --sc-danger: #9b1c1c;
+  --sc-success-bg: #e7f6ec;
+  --sc-success: #166534;
+  --sc-page: linear-gradient(160deg, #ffffff 40%, #e8effb);
+  --sc-radius-card: 16px;
+  --sc-radius-control: 8px;
+  --sc-shadow-card: 0 24px 48px -24px rgba(23, 55, 120, 0.3);
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  color: var(--sc-text);
+  background: #ffffff;
   line-height: 1.5;
 }
 
@@ -24,7 +35,7 @@
 body {
   margin: 0;
   min-width: 320px;
-  background: var(--color-background);
+  background: #ffffff;
 }
 
 h1,
@@ -36,15 +47,15 @@ button {
   font: inherit;
   cursor: pointer;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--sc-radius-control);
   padding: 0.7rem 1.1rem;
-  background: var(--color-primary);
+  background: var(--sc-blue);
   color: #fff;
   font-weight: 600;
 }
 
 button:hover:not(:disabled) {
-  background: var(--color-primary-dark);
+  background: var(--sc-blue-dark);
 }
 
 button:disabled {
@@ -53,171 +64,967 @@ button:disabled {
 }
 
 button:focus-visible,
-input:focus-visible {
-  outline: 3px solid #9cc3e6;
+input:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--sc-blue);
   outline-offset: 2px;
 }
 
 .button-secondary {
-  background: transparent;
-  color: var(--color-primary);
-  border: 1px solid var(--color-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.5rem;
   padding: 0.45rem 0.9rem;
+  border: 1px solid var(--sc-line);
+  background: #fff;
+  color: var(--sc-ink);
+  font-size: 0.875rem;
+}
+
+.button-secondary svg {
+  flex: none;
+  width: 18px;
+  height: 18px;
 }
 
 .button-secondary:hover:not(:disabled) {
-  background: #e8f0f8;
+  background: var(--sc-hover);
+  border-color: #b3c0d3;
 }
 
-/* Connexion */
+/* Masqué à l'écran, toujours lu par les lecteurs d'écran */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Connexion : page plein écran, d'après la maquette validée */
 
 .login-page {
+  --login-card-width: 432px;
+  --login-gap: clamp(2rem, 5vw, 5rem);
+  /* Le fond occupe tout l'écran ; le contenu reste dans une colonne de 1180 px au plus */
+  --login-pad: max(clamp(1.5rem, 6vw, 5rem), calc((100% - 1180px) / 2));
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   min-height: 100vh;
+  min-height: 100dvh;
   display: grid;
-  place-items: center;
-  padding: 1rem;
+  grid-template-columns: minmax(0, 1fr) minmax(0, var(--login-card-width));
+  column-gap: var(--login-gap);
+  align-items: center;
+  padding: clamp(2rem, 6vh, 4rem) var(--login-pad);
+  background: var(--sc-page);
+  color: var(--sc-text);
 }
 
-.login-card {
-  width: 100%;
-  max-width: 400px;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
-  padding: 2rem 1.5rem;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 8px 24px rgba(31, 78, 121, 0.08);
+/* Bâtiment centré sous la colonne de gauche, aussi grand que la hauteur de l'écran le permet.
+   Sa partie haute (tour, nuages) tombe à droite du texte : il ne le chevauche pas, même sur un
+   écran de portable peu haut. */
+.login-illustration {
+  position: absolute;
+  z-index: -1;
+  bottom: 0;
+  left: calc((100% - var(--login-card-width) - var(--login-gap)) / 2);
+  /* -55 % et non -50 % : le bâtiment est un peu à droite dans le dessin, ce décalage le recentre */
+  transform: translateX(-55%);
+  height: clamp(220px, calc(100vh - 260px), 480px);
+  max-width: calc(100% - var(--login-card-width) - var(--login-gap) - var(--login-pad));
+  object-fit: contain;
+  object-position: center bottom;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Colonne de gauche */
+
+.login-hero {
+  align-self: start;
 }
 
 .login-brand {
   display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 1.5rem;
+  flex-direction: column;
+  gap: 0.15rem;
 }
 
-.login-brand h1 {
-  margin: 0;
-  font-size: 1.4rem;
-  color: var(--color-primary);
+.login-wordmark {
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--sc-ink);
 }
 
-.login-brand p {
+.login-wordmark span {
+  color: var(--sc-blue);
+}
+
+.login-school {
+  font-size: 0.95rem;
+  color: var(--sc-muted);
+}
+
+.login-hero h1 {
+  margin: clamp(1.75rem, 6vh, 3rem) 0 1rem;
+  max-width: 15ch;
+  font-size: clamp(1.75rem, 1.2rem + 1.2vw, 2.25rem);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--sc-ink);
+}
+
+.login-lead {
+  margin: 0 0 clamp(1.25rem, 4vh, 2rem);
+  max-width: 34ch;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--sc-muted);
+}
+
+.login-perks {
+  list-style: none;
   margin: 0;
-  color: var(--color-muted);
+  padding: 0;
+  display: grid;
+  gap: clamp(0.6rem, 1.6vh, 0.9rem);
   font-size: 0.9rem;
+  color: var(--sc-ink);
+}
+
+.login-perks li {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.login-check {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  color: var(--sc-blue);
+}
+
+.login-check circle {
+  fill: var(--sc-tint);
+}
+
+/* Carte de connexion */
+
+.login-card {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 2.25rem 2.25rem 2rem;
+  background: #fff;
+  border: 1px solid var(--sc-line-soft);
+  border-radius: var(--sc-radius-card);
+  box-shadow: var(--sc-shadow-card);
+}
+
+.login-card-icon {
+  align-self: center;
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  margin-bottom: 1.25rem;
+  border-radius: 50%;
+  background: var(--sc-tint);
+  color: var(--sc-blue);
+}
+
+.login-card-icon svg {
+  width: 26px;
+  height: 26px;
 }
 
 .login-card h2 {
-  margin: 0 0 1rem;
-  font-size: 1.15rem;
+  margin: 0;
+  text-align: center;
+  font-size: 1.5rem;
+  letter-spacing: -0.01em;
+  color: var(--sc-ink);
+}
+
+.login-card-subtitle {
+  margin: 0.4rem 0 2rem;
+  text-align: center;
+  font-size: 0.95rem;
+  color: var(--sc-muted);
 }
 
 .login-card label {
-  font-weight: 600;
+  margin-bottom: 0.45rem;
   font-size: 0.9rem;
-  margin-bottom: 0.3rem;
+  font-weight: 600;
+  color: var(--sc-ink);
 }
 
-.login-card input {
+.login-field {
+  position: relative;
+  margin-bottom: 1.25rem;
+}
+
+.login-field-icon {
+  position: absolute;
+  left: 0.9rem;
+  top: 50%;
+  width: 18px;
+  height: 18px;
+  transform: translateY(-50%);
+  color: #475569;
+  pointer-events: none;
+}
+
+.login-field input {
   font: inherit;
-  padding: 0.65rem 0.75rem;
-  border: 1px solid var(--color-border);
-  border-radius: 8px;
-  margin-bottom: 1rem;
+  font-size: 0.95rem;
   width: 100%;
-}
-
-.login-card button {
-  margin-top: 0.25rem;
-}
-
-.alert {
-  margin: 0 0 1rem;
-  padding: 0.7rem 0.85rem;
+  height: 3rem;
+  padding: 0 1rem 0 2.75rem;
+  border: 1px solid var(--sc-line);
   border-radius: 8px;
-  background: var(--color-danger-bg);
-  color: var(--color-danger-text);
-  font-size: 0.92rem;
+  background: #fff;
+  color: var(--sc-ink);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
-/* Accueil */
-
-.topbar {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 0.75rem 1rem;
-  background: var(--color-surface);
-  border-bottom: 1px solid var(--color-border);
+.login-field-password input {
+  padding-right: 3.25rem;
 }
 
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-weight: 700;
-  color: var(--color-primary);
-  margin-right: auto;
+.login-field input::placeholder {
+  color: #7a8699;
 }
 
-.topbar-user {
-  color: var(--color-muted);
-  font-size: 0.92rem;
+.login-field input:hover {
+  border-color: #b3c0d3;
 }
 
-.home {
-  max-width: 760px;
-  margin: 0 auto;
-  padding: 1.5rem 1rem 3rem;
+.login-field input:focus {
+  border-color: var(--sc-blue);
+  box-shadow: 0 0 0 3px rgba(29, 91, 216, 0.15);
 }
 
-.home h1 {
-  margin: 0.5rem 0 0.25rem;
-  font-size: 1.6rem;
-}
-
-.subtitle {
-  margin: 0 0 1.5rem;
-  color: var(--color-muted);
-  overflow-wrap: anywhere;
-}
-
-.card {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
-  padding: 1rem 1.25rem;
-  margin-bottom: 1rem;
-}
-
-.card h2 {
-  margin: 0 0 0.5rem;
-  font-size: 1.05rem;
-}
-
-.card p {
-  margin: 0;
-}
-
-.card-muted {
+/* Bouton œil : afficher ou masquer le mot de passe */
+.login-eye {
+  position: absolute;
+  right: 2px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border-radius: 6px;
   background: transparent;
-  border-style: dashed;
+  color: var(--sc-text);
 }
 
-.card-muted ul {
-  margin: 0;
-  padding-left: 1.2rem;
-  color: var(--color-muted);
+.login-eye svg {
+  width: 20px;
+  height: 20px;
 }
 
-@media (max-width: 480px) {
-  .topbar-user {
+.login-page .login-eye:hover:not(:disabled) {
+  background: var(--sc-hover);
+}
+
+.login-card .alert {
+  margin: 0 0 1.25rem;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid #f3c7c7;
+  border-radius: 8px;
+  background: var(--sc-danger-bg);
+  color: var(--sc-danger);
+  font-size: 0.9rem;
+}
+
+.login-submit {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 3rem;
+  margin-top: 0.25rem;
+  padding: 0 3rem;
+  border-radius: 8px;
+  background: var(--sc-blue);
+  font-size: 0.95rem;
+}
+
+.login-submit-arrow {
+  position: absolute;
+  right: 1rem;
+  width: 18px;
+  height: 18px;
+}
+
+.login-page .login-submit:hover:not(:disabled) {
+  background: var(--sc-blue-dark);
+}
+
+.login-page button:focus-visible,
+.login-page input:focus-visible {
+  outline: 2px solid var(--sc-blue);
+  outline-offset: 2px;
+}
+
+/* Ordinateur à écran peu haut (portable affiché à 150 %) : la carte tient sans défilement */
+@media (min-width: 901px) and (max-height: 620px) {
+  .login-page {
+    padding-block: 1rem;
+  }
+
+  .login-card {
+    padding: 1.5rem 2rem;
+  }
+
+  .login-card-icon {
+    width: 52px;
+    height: 52px;
+    margin-bottom: 0.75rem;
+  }
+
+  .login-card-icon svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .login-card-subtitle {
+    margin-bottom: 1.25rem;
+  }
+}
+
+/* Tablette et mobile : une seule colonne, formulaire d'abord */
+@media (max-width: 900px) {
+  .login-page {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+    /* Centré verticalement quand la place le permet, sans jamais couper le haut sur un petit écran */
+    align-content: start;
+    align-content: safe center;
+    row-gap: 1.5rem;
+    padding: 1.5rem 1rem 2rem;
+  }
+
+  .login-hero {
+    align-self: auto;
+    text-align: center;
+  }
+
+  .login-wordmark {
+    font-size: 1.4rem;
+  }
+
+  .login-hero h1 {
+    margin: 1rem auto 0;
+    font-size: 1.4rem;
+  }
+
+  .login-lead,
+  .login-perks,
+  .login-illustration {
     display: none;
   }
 
-  .home h1 {
-    font-size: 1.35rem;
+  .login-card {
+    max-width: 440px;
+    padding: 1.75rem 1.25rem 1.5rem;
+  }
+
+  .login-card-subtitle {
+    margin-bottom: 1.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .login-field input {
+    transition: none;
+  }
+}
+
+/* Accueil : même système de design que la connexion (couleurs, police, cartes, icônes) */
+
+.home-page {
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: var(--sc-page);
+  color: var(--sc-text);
+}
+
+/* Même colonne de 1180 px au plus que la page de connexion */
+.home-container {
+  width: 100%;
+  max-width: 1180px;
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 4vw, 2rem);
+}
+
+/* Barre du haut */
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.94);
+  border-bottom: 1px solid var(--sc-line-soft);
+  backdrop-filter: blur(8px);
+}
+
+.topbar-inner {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  min-height: 4rem;
+}
+
+.topbar-brand {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+
+.wordmark {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--sc-ink);
+}
+
+.wordmark span {
+  color: var(--sc-blue);
+}
+
+.topbar-school {
+  margin-top: 0.1rem;
+  font-size: 0.75rem;
+  color: var(--sc-muted);
+}
+
+.topnav {
+  display: flex;
+  align-self: stretch;
+  gap: 0.25rem;
+  margin-right: auto;
+}
+
+.topnav-link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0 0.75rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  white-space: nowrap;
+  color: var(--sc-text);
+  text-decoration: none;
+}
+
+.topnav-link svg {
+  flex: none;
+  width: 18px;
+  height: 18px;
+}
+
+a.topnav-link:hover {
+  color: var(--sc-ink);
+}
+
+.topnav-link.is-active {
+  font-weight: 600;
+  color: var(--sc-ink);
+}
+
+/* Soulignement de la page active, posé sur la bordure de la barre */
+.topnav-link.is-active::after {
+  content: '';
+  position: absolute;
+  right: 0.75rem;
+  bottom: -1px;
+  left: 0.75rem;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--sc-blue);
+}
+
+/* Page pas encore livrée : visible, mais inactive */
+.topnav-link.is-soon {
+  color: #8a97ab;
+  cursor: not-allowed;
+}
+
+.topbar-user {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding-left: 1.5rem;
+  border-left: 1px solid var(--sc-line-soft);
+}
+
+.avatar {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  background: var(--sc-tint);
+  color: var(--sc-blue);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.topbar-user-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+
+.topbar-user-text strong {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--sc-ink);
+}
+
+.topbar-user-text span {
+  font-size: 0.75rem;
+  color: var(--sc-muted);
+}
+
+/* Contenu */
+
+.home {
+  padding-top: 2rem;
+  padding-bottom: 3rem;
+}
+
+.home-greeting {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.home-title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+}
+
+.home-greeting h1 {
+  margin: 0;
+  font-size: clamp(1.6rem, 1.2rem + 1.2vw, 2rem);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--sc-ink);
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  background: var(--sc-success-bg);
+  color: var(--sc-success);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.status-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: #16a34a;
+}
+
+.home-subtitle {
+  margin: 0.35rem 0 0;
+  font-size: 0.95rem;
+  color: var(--sc-muted);
+}
+
+.home-meta {
+  display: grid;
+  gap: 0.25rem;
+  justify-items: end;
+  font-size: 0.875rem;
+  color: var(--sc-muted);
+}
+
+.home-meta p {
+  margin: 0;
+}
+
+.home-meta-date {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.home-meta svg {
+  flex: none;
+  width: 16px;
+  height: 16px;
+}
+
+.home-meta strong {
+  color: var(--sc-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Bandeau : bleu de la connexion, et à droite l'illustration du campus sur le fond de la connexion */
+.home-hero {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  min-height: 10.5rem;
+  margin-bottom: 2.25rem;
+  padding: 2rem 2.25rem;
+  border-radius: var(--sc-radius-card);
+  background: linear-gradient(120deg, var(--sc-ink) 0%, #16367f 55%, var(--sc-blue) 100%);
+  box-shadow: var(--sc-shadow-card);
+  color: #fff;
+}
+
+.home-hero-text {
+  position: relative;
+  z-index: 1;
+  max-width: min(34rem, 55%);
+}
+
+.home-hero h2 {
+  margin: 0 0 0.6rem;
+  font-size: clamp(1.35rem, 1rem + 1.2vw, 1.75rem);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.home-hero p {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #d6e2fb;
+}
+
+.home-hero-rule {
+  display: block;
+  width: 3rem;
+  height: 3px;
+  margin-top: 1.1rem;
+  border-radius: 3px;
+  background: #8fb1f3;
+}
+
+.home-hero-art {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 42%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: var(--sc-page);
+  /* Bord gauche arrondi, comme une fenêtre ouverte sur le campus */
+  clip-path: ellipse(100% 125% at 100% 50%);
+}
+
+.home-hero-art img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center bottom;
+}
+
+/* Sections */
+
+.home-section {
+  margin-bottom: 2.25rem;
+}
+
+.home-section-title {
+  margin: 0 0 1rem;
+  font-size: 1.2rem;
+  letter-spacing: -0.01em;
+  color: var(--sc-ink);
+}
+
+.service-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: 1rem;
+}
+
+.service-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.25rem;
+  background: #fff;
+  border: 1px solid var(--sc-line-soft);
+  border-radius: var(--sc-radius-card);
+  box-shadow: 0 1px 2px rgba(15, 27, 61, 0.04);
+}
+
+.service-icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 12px;
+  background: var(--sc-tint);
+  color: var(--sc-blue);
+}
+
+.service-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.service-card h3 {
+  margin: 0 0 0.4rem;
+  font-size: 1rem;
+  line-height: 1.3;
+  color: var(--sc-ink);
+}
+
+.sprint-badge {
+  display: inline-block;
+  padding: 0.1rem 0.55rem;
+  border-radius: 999px;
+  background: var(--sc-tint);
+  color: var(--sc-blue);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.service-card p {
+  margin: 0.55rem 0 0;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: var(--sc-muted);
+}
+
+/* Votre compte */
+
+.account-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  align-items: center;
+  padding: 1rem 1.25rem;
+  background: #fff;
+  border: 1px solid var(--sc-line-soft);
+  border-radius: var(--sc-radius-card);
+  box-shadow: 0 1px 2px rgba(15, 27, 61, 0.04);
+}
+
+.account-person {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding-right: 1.25rem;
+}
+
+.account-avatar {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background: var(--sc-tint);
+  color: var(--sc-blue);
+}
+
+.account-avatar svg {
+  width: 22px;
+  height: 22px;
+}
+
+.account-person strong {
+  display: block;
+  font-weight: 600;
+  color: var(--sc-ink);
+}
+
+.account-person span {
+  font-size: 0.85rem;
+  color: var(--sc-muted);
+}
+
+.account-details {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 0;
+}
+
+.account-item {
+  min-width: 0;
+  padding: 0.25rem 1.25rem;
+  border-left: 1px solid var(--sc-line-soft);
+}
+
+.account-item dt {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--sc-muted);
+}
+
+.account-item dt svg {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  color: var(--sc-text);
+}
+
+/* Aligné sur le texte de l'étiquette, après l'icône */
+.account-item dd {
+  margin: 0.15rem 0 0 1.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--sc-ink);
+  overflow-wrap: anywhere;
+}
+
+/* Tablette : la navigation passe sur une deuxième ligne */
+@media (max-width: 960px) {
+  .topbar-inner {
+    flex-wrap: wrap;
+    row-gap: 0;
+    min-height: 0;
+    padding-top: 0.6rem;
+  }
+
+  .topbar-brand {
+    margin-right: auto;
+  }
+
+  .topnav {
+    order: 3;
+    flex-basis: 100%;
+    min-height: 2.75rem;
+    margin-top: 0.6rem;
+    margin-right: 0;
+    overflow-x: auto;
+  }
+
+  .topnav-link:first-child {
+    padding-left: 0;
+  }
+
+  .topnav-link:first-child.is-active::after {
+    left: 0;
+  }
+
+  /* Votre compte : identité au-dessus, coordonnées en dessous */
+  .account-card {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .account-person {
+    margin-bottom: 0.85rem;
+    padding: 0 0 0.85rem;
+    border-bottom: 1px solid var(--sc-line-soft);
+  }
+
+  .account-item:first-child {
+    padding-left: 0;
+    border-left: 0;
+  }
+}
+
+/* Mobile : avatar et icône seuls dans la barre, tout le contenu sur une colonne */
+@media (max-width: 640px) {
+  .topbar-user {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .topbar-user-text {
+    display: none;
+  }
+
+  .logout-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .button-secondary.logout {
+    padding-inline: 0.65rem;
+  }
+
+  .home {
+    padding-top: 1.5rem;
+  }
+
+  .home-meta {
+    justify-items: start;
+  }
+
+  .home-hero {
+    min-height: 0;
+    padding: 1.5rem 1.25rem;
+  }
+
+  .home-hero-text {
+    max-width: none;
+  }
+
+  .home-hero-art {
+    display: none;
+  }
+
+  .account-details {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .account-item {
+    padding: 0;
+    border-left: 0;
+  }
+
+  .account-item + .account-item {
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--sc-line-soft);
+  }
+
+  /* Les trois liens tiennent sur la largeur d'un téléphone */
+  .topnav-link {
+    padding: 0 0.55rem;
+    font-size: 0.85rem;
+  }
+
+  .topnav-link svg {
+    display: none;
   }
 }
