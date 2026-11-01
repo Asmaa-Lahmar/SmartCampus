@@ -1,4 +1,3 @@
-// Choisit la page à afficher selon la session, le rôle et l'adresse (SC-11, SC-17, SC-18, SC-20 à SC-23).
 
 import { useCallback, useState } from 'react'
 import { loadSession, saveSession, type Session, type SessionUser } from './auth/session'
@@ -8,6 +7,7 @@ import ForgotPasswordPage from './pages/ForgotPasswordPage'
 import HomePage from './pages/HomePage'
 import LoginPage from './pages/LoginPage'
 import ManageRoomsPage from './pages/ManageRoomsPage'
+import ProfilePage from './pages/ProfilePage'
 import ResetPasswordPage from './pages/ResetPasswordPage'
 import RoomPlanningPage from './pages/RoomPlanningPage'
 import RoomsPage from './pages/RoomsPage'
@@ -18,9 +18,10 @@ function Forbidden() {
   return <StatusPage title="Accès refusé" message="Votre rôle ne permet pas d'ouvrir cette page." />
 }
 
-function renderPage(session: Session, location: Location) {
+function renderPage(session: Session, location: Location, onUserUpdated: (user: SessionUser) => void) {
   const { path } = location
   if (path === '/') return <HomePage user={session.user} />
+  if (path === '/profil') return <ProfilePage session={session} onUserUpdated={onUserUpdated} />
   if (path === '/salles') return <RoomsPage session={session} location={location} />
   const room = matchPath('/salles/:id', path)
   if (room && /^\d+$/.test(room.id)) {
@@ -81,7 +82,7 @@ export default function App() {
       onLoggedOut={handleLoggedOut}
       onUserUpdated={handleUserUpdated}
     >
-      {renderPage(session, location)}
+      {renderPage(session, location, handleUserUpdated)}
     </AppLayout>
   )
 }
