@@ -1,4 +1,4 @@
-
+"""Paramètres de l'API, lus dans les variables d'environnement puis dans backend/.env."""
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -31,6 +31,21 @@ class Settings(BaseSettings):
     opening_hour: int = 8
     closing_hour: int = 20
     slot_minutes: int = 30
+
+    # Réinitialisation du mot de passe (EF-AUTH-05) : lien valable 30 min, à usage unique
+    password_reset_minutes: int = 30
+    # Adresse de l'interface, pour construire le lien envoyé par e-mail
+    frontend_url: str = "http://localhost:5173"
+
+    # E-mails : « console » les affiche dans le terminal d'uvicorn, « smtp » les envoie
+    # (MailHog en développement : localhost:1025, boîte visible sur http://localhost:8025)
+    mail_backend: str = "console"
+    smtp_host: str = "localhost"
+    smtp_port: int = 1025
+    smtp_username: str | None = None
+    smtp_password: str | None = None
+    smtp_starttls: bool = False
+    mail_from: str = "SmartCampus <no-reply@usms.ac.ma>"
 
 
 settings = Settings()
