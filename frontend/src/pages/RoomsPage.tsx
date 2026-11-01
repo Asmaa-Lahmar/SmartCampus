@@ -1,5 +1,6 @@
 // Salles : la liste des salles du campus (SC-21, EF-ROOM-01) et la recherche d'une salle libre
-// sur un créneau (SC-22, EF-ROOM-02). Les critères de recherche sont dans l'URL :
+// sur un créneau (SC-22, EF-ROOM-02), avec un lien vers le planning de chaque salle (SC-23).
+// Les critères de recherche sont dans l'URL :
 // #/salles?date=2026-11-02&debut=10:00&fin=12:00&participants=20
 
 import { useEffect, useMemo, useState, type FormEvent } from 'react'
@@ -15,7 +16,7 @@ import {
   type RoomType,
 } from '../api/rooms'
 import type { Session } from '../auth/session'
-import { BuildingIcon, MapPinIcon, SearchIcon, UsersIcon } from '../components/icons'
+import { ArrowIcon, BuildingIcon, MapPinIcon, SearchIcon, UsersIcon } from '../components/icons'
 import {
   CLOSING,
   defaultSlot,
@@ -28,6 +29,7 @@ import {
   toMinutes,
 } from '../dates'
 import { Link, navigate, withQuery, type Location } from '../router'
+import { planningPath } from './RoomPlanningPage'
 import './RoomsPage.css'
 
 interface Props {
@@ -96,7 +98,7 @@ function checkCriteria(criteria: Criteria): string | null {
   return null
 }
 
-export function RoomCard({ room }: { room: Room }) {
+export function RoomCard({ room, planningTo }: { room: Room; planningTo?: string }) {
   return (
     <article className="room-card">
       <header className="room-card-head">
@@ -119,6 +121,12 @@ export function RoomCard({ room }: { room: Room }) {
       {/* Le catalogue d'équipements arrive avec SC-31 (Sprint 3) */}
       <p className="room-equipment">Équipements : aucun renseigné</p>
       {room.description && <p className="room-description">{room.description}</p>}
+      {planningTo && (
+        <Link to={planningTo} className="room-card-link">
+          Voir le planning
+          <ArrowIcon />
+        </Link>
+      )}
     </article>
   )
 }
@@ -360,7 +368,10 @@ export default function RoomsPage({ session, location }: Props) {
             <ul className="room-grid">
               {result.rooms.map((room) => (
                 <li key={room.id}>
-                  <RoomCard room={room} />
+                  <RoomCard
+                    room={room}
+                    planningTo={planningPath(room.id, { date: initial.date, back: criteriaToPath(initial) })}
+                  />
                 </li>
               ))}
             </ul>
@@ -442,7 +453,7 @@ export default function RoomsPage({ session, location }: Props) {
             <ul className="room-grid">
               {rooms.map((room) => (
                 <li key={room.id}>
-                  <RoomCard room={room} />
+                  <RoomCard room={room} planningTo={planningPath(room.id)} />
                 </li>
               ))}
             </ul>

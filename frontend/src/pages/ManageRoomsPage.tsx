@@ -1,11 +1,14 @@
 // Gestion des salles par le gestionnaire : créer, modifier, archiver (SC-20, EF-ROOM-04, ENF-03).
+// SC-23 : lien vers le planning, y compris d'une salle archivée (réservations passées).
 
 import { useCallback, useEffect, useMemo, useState, type FormEvent } from 'react'
 import { errorMessage } from '../api/client'
 import { archiveRoom, fetchRooms, ROOM_STATUS_LABELS, ROOM_TYPE_LABELS, type Room } from '../api/rooms'
 import type { Session } from '../auth/session'
 import Dialog from '../components/Dialog'
-import { ArchiveIcon, PencilIcon, PlusIcon } from '../components/icons'
+import { ArchiveIcon, CalendarIcon, PencilIcon, PlusIcon } from '../components/icons'
+import { Link } from '../router'
+import { planningPath } from './RoomPlanningPage'
 import RoomFormDialog from './RoomFormDialog'
 import './ManageRoomsPage.css'
 
@@ -179,34 +182,44 @@ export default function ManageRoomsPage({ session }: Props) {
                       <span className={STATUS_BADGE[room.status]}>{ROOM_STATUS_LABELS[room.status]}</span>
                     </td>
                     <td>
-                      {!archived && (
-                        <div className="table-actions">
-                          <button
-                            type="button"
-                            className="icon-button"
-                            onClick={() => {
-                              setMessage(null)
-                              setEditing(room)
-                            }}
-                            aria-label={`Modifier la salle ${room.code}`}
-                            title="Modifier"
-                          >
-                            <PencilIcon />
-                          </button>
-                          <button
-                            type="button"
-                            className="icon-button is-danger"
-                            onClick={() => {
-                              setMessage(null)
-                              setArchiving(room)
-                            }}
-                            aria-label={`Archiver la salle ${room.code}`}
-                            title="Archiver"
-                          >
-                            <ArchiveIcon />
-                          </button>
-                        </div>
-                      )}
+                      <div className="table-actions">
+                        <Link
+                          to={planningPath(room.id, { back: '/gestion/salles' })}
+                          className="icon-button"
+                          aria-label={`Planning de la salle ${room.code}`}
+                          title="Planning"
+                        >
+                          <CalendarIcon />
+                        </Link>
+                        {!archived && (
+                          <>
+                            <button
+                              type="button"
+                              className="icon-button"
+                              onClick={() => {
+                                setMessage(null)
+                                setEditing(room)
+                              }}
+                              aria-label={`Modifier la salle ${room.code}`}
+                              title="Modifier"
+                            >
+                              <PencilIcon />
+                            </button>
+                            <button
+                              type="button"
+                              className="icon-button is-danger"
+                              onClick={() => {
+                                setMessage(null)
+                                setArchiving(room)
+                              }}
+                              aria-label={`Archiver la salle ${room.code}`}
+                              title="Archiver"
+                            >
+                              <ArchiveIcon />
+                            </button>
+                          </>
+                        )}
+                      </div>
                     </td>
                   </tr>
                 )
