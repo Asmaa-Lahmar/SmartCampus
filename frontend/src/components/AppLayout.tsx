@@ -1,10 +1,11 @@
-// Mise en page des pages connectées (SC-17, SC-20, SC-21) : barre du haut, navigation selon le rôle,
+// Mise en page des pages connectées (SC-17, SC-20, SC-21, SC-19) : barre du haut, navigation selon le rôle,
 // déconnexion (SC-15) et retour à la connexion quand le jeton expire.
 
 import { useEffect, useState, type ComponentType, type ReactNode } from 'react'
 import { fetchMe, logout, setUnauthorizedHandler } from '../api/client'
 import { clearSession, isExpired, ROLE_LABELS, type Role, type Session, type SessionUser } from '../auth/session'
 import { Link } from '../router'
+import Avatar, { useProfilePhoto } from './Avatar'
 import { FileIcon, HomeIcon, LogoutIcon, SearchIcon, SettingsIcon, UsersIcon, type IconProps } from './icons'
 
 interface NavItem {
@@ -47,19 +48,10 @@ interface Props {
   children: ReactNode
 }
 
-export function initials(fullName: string): string {
-  return fullName
-    .trim()
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((part) => part.charAt(0).toUpperCase())
-    .join('')
-}
-
 export default function AppLayout({ session, path, onLoggedOut, onUserUpdated, children }: Props) {
   const [busy, setBusy] = useState(false)
   const { user } = session
+  const photoUrl = useProfilePhoto(session)
 
   useEffect(() => {
     setUnauthorizedHandler(onLoggedOut)
@@ -149,15 +141,19 @@ export default function AppLayout({ session, path, onLoggedOut, onUserUpdated, c
             )}
           </nav>
 
-          <div className="topbar-user">
-            <span className="avatar" aria-hidden="true">
-              {initials(user.full_name)}
-            </span>
-            <span className="topbar-user-text">
+          <Link
+            to="/profil"
+            className={path === '/profil' ? 'topbar-user topbar-user-link is-active' : 'topbar-user topbar-user-link'}
+            aria-label={`Mon profil : ${user.full_name}, ${ROLE_LABELS[user.role]}`}
+            aria-current={path === '/profil' ? 'page' : undefined}
+            title="Mon profil"
+          >
+            <Avatar name={user.full_name} photoUrl={photoUrl} />
+            <span className="topbar-user-text" aria-hidden="true">
               <strong>{user.full_name}</strong>
               <span>{ROLE_LABELS[user.role]}</span>
             </span>
-          </div>
+          </Link>
 
           <button type="button" className="button-secondary logout" onClick={handleLogout} disabled={busy}>
             <LogoutIcon />
