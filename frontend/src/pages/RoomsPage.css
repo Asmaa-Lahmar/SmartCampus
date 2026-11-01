@@ -134,3 +134,33 @@
   font-size: 0.9rem;
   color: var(--sc-muted);
 }
+
+/* Lien vers le planning de la salle (SC-23) */
+.room-card-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: auto;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--sc-line-soft);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--sc-blue);
+  text-decoration: none;
+}
+
+.room-card-link svg {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.15s ease;
+}
+
+.room-card-link:hover svg {
+  transform: translateX(3px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .room-card-link svg {
+    transition: none;
+  }
+}
