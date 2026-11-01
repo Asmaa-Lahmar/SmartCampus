@@ -1,4 +1,4 @@
-// Choisit la page à afficher selon la session, le rôle et l'adresse (SC-11, SC-17, SC-20 à SC-23).
+// Choisit la page à afficher selon la session, le rôle et l'adresse (SC-11, SC-17, SC-18, SC-20 à SC-23).
 
 import { useCallback, useState } from 'react'
 import { loadSession, saveSession, type Session, type SessionUser } from './auth/session'
@@ -8,10 +8,11 @@ import ForgotPasswordPage from './pages/ForgotPasswordPage'
 import HomePage from './pages/HomePage'
 import LoginPage from './pages/LoginPage'
 import ManageRoomsPage from './pages/ManageRoomsPage'
+import ResetPasswordPage from './pages/ResetPasswordPage'
 import RoomPlanningPage from './pages/RoomPlanningPage'
 import RoomsPage from './pages/RoomsPage'
 import StatusPage from './pages/StatusPage'
-import { matchPath, useLocation, type Location } from './router'
+import { matchPath, navigate, useLocation, type Location } from './router'
 
 function Forbidden() {
   return <StatusPage title="Accès refusé" message="Votre rôle ne permet pas d'ouvrir cette page." />
